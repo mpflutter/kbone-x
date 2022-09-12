@@ -35,6 +35,12 @@ module.exports = Behavior({
             type: Boolean,
             value: false,
         },
+        privateNodeId: {
+            type: String,
+        },
+        privatePageId: {
+            type: String,
+        }
     },
     data: {
         wxCompName: '', // 需要渲染的内置组件名
@@ -51,8 +57,8 @@ module.exports = Behavior({
         isOriginalSetData = config.optimization.setDataMode === 'original'
     },
     attached() {
-        const nodeId = this.dataset.privateNodeId
-        const pageId = this.dataset.privatePageId
+        const nodeId = this.dataset.privateNodeId || this.data.privateNodeId
+        const pageId = this.dataset.privatePageId || this.data.privatePageId
         const data = {}
 
         this.nodeId = nodeId

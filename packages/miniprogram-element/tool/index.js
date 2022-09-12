@@ -156,7 +156,7 @@ function createIndexTemplate() {
 /**
  * 构建
  */
-function build() {
+function build(callback) {
     webpack(webpackConfig).run((err, stats) => {
         if (err) {
             console.log(err)
@@ -173,7 +173,14 @@ function build() {
                 publicPath: true,
             }))
         }
+        callback()
     })
+}
+
+function replaceRequire() {
+    let c = fs.readFileSync('dist/base.js', {encoding: 'utf-8'})
+    c = c.replace(/require\("miniprogram-render"\)/, "require('../miniprogram-render/index')")
+    fs.writeFileSync('dist/base.js', c)
 }
 
 function main() {
@@ -182,6 +189,8 @@ function main() {
     createInnerComponentTemplate()
     createIndexTemplate()
 
-    build()
+    build(function() {
+        replaceRequire()
+    })
 }
 main()

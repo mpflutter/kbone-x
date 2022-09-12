@@ -268,7 +268,7 @@ class MpPlugin {
                 addFile(compilation, `../${pageRoute}.js`, pageJsContent)
 
                 // 页面 wxml
-                let pageWxmlContent = `<element wx:if="{{pageId}}" class="{{bodyClass}}" style="{{bodyStyle}}" data-private-node-id="e-body" data-private-page-id="{{pageId}}" ${wxCustomComponentRoot || useWeui ? 'generic:custom-component="custom-component"' : ''}></element>`
+                let pageWxmlContent = `<element wx:if="{{pageId}}" class="{{bodyClass}}" style="{{bodyStyle}}" data-private-node-id="e-body" data-private-page-id="{{pageId}}" private-node-id="e-body" private-page-id="{{pageId}}" ${wxCustomComponentRoot || useWeui ? 'generic:custom-component="custom-component"' : ''}></element>`
                 if (loadingView) pageWxmlContent = `<loading-view wx:if="{{loading}}" class="miniprogram-loading-view" page-name="${entryName}"></loading-view>` + pageWxmlContent
                 if (rem || pageStyle) pageWxmlContent = `<page-meta ${rem ? 'root-font-size="{{rootFontSize}}"' : ''} ${pageStyle ? 'page-style="{{pageStyle}}"' : ''}></page-meta>` + pageWxmlContent
                 addFile(compilation, `../${pageRoute}.wxml`, pageWxmlContent)
@@ -284,7 +284,8 @@ class MpPlugin {
                     ...pageExtraConfig,
                     enablePullDownRefresh: !!pullDownRefresh,
                     usingComponents: {
-                        element: 'miniprogram-element',
+                        element: '../../miniprogram_npm/miniprogram-element/index',
+                        // element: 'miniprogram-element',
                     },
                 }
                 if (loadingView) pageJson.usingComponents['loading-view'] = `${assetPathPrefix}../../loading-view/${loadingViewName}`
@@ -533,7 +534,7 @@ class MpPlugin {
                 // custom-component/index.wxml
                 addFile(compilation, '../custom-component/index.wxml', names.map((key, index) => {
                     const {props = [], events = []} = wxCustomComponents[key]
-                    return `<${key} wx:${index === 0 ? 'if' : 'elif'}="{{kboneCustomComponentName === '${key}'}}" id="{{id}}" class="{{className}}" style="{{style}}" ${props.map(name => name + '="{{' + (name.replace(/-([a-zA-Z])/g, (all, $1) => $1.toUpperCase())) + '}}"').join(' ')} ${events.map(name => 'bind' + name + '="on' + name + '"').join(' ')}><block wx:if="{{hasSlots}}"><element wx:for="{{slots}}" wx:key="nodeId" id="{{item.id}}" class="{{item.className}}" style="{{item.style}}" slot="{{item.slot}}" data-private-node-id="{{item.nodeId}}" data-private-page-id="{{item.pageId}}" generic:custom-component="custom-component"></element></block><slot/></${key}>`
+                    return `<${key} wx:${index === 0 ? 'if' : 'elif'}="{{kboneCustomComponentName === '${key}'}}" id="{{id}}" class="{{className}}" style="{{style}}" ${props.map(name => name + '="{{' + (name.replace(/-([a-zA-Z])/g, (all, $1) => $1.toUpperCase())) + '}}"').join(' ')} ${events.map(name => 'bind' + name + '="on' + name + '"').join(' ')}><block wx:if="{{hasSlots}}"><element wx:for="{{slots}}" wx:key="nodeId" id="{{item.id}}" class="{{item.className}}" style="{{item.style}}" slot="{{item.slot}}" data-private-node-id="{{item.nodeId}}" data-private-page-id="{{item.pageId}}" private-node-id="{{item.nodeId}}" private-page-id="{{item.pageId}}" generic:custom-component="custom-component"></element></block><slot/></${key}>`
                 }).join('\n'))
 
                 // custom-component/index.wxss

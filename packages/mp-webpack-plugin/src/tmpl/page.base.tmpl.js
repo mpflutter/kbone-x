@@ -1,4 +1,4 @@
-const mp = require('miniprogram-render')
+const mp = require('../miniprogram_npm/miniprogram-render/index')
 
 const {
     tool,
@@ -89,7 +89,7 @@ module.exports = function(mp, config, init) {
             },
             lifetimes: {
                 attached() {
-                    const owner = this.selectOwnerComponent()
+                    const owner = this.selectOwnerComponent ? this.selectOwnerComponent() : false
                     if (this.route && !owner) {
                         this.isPage = true
                     } else {

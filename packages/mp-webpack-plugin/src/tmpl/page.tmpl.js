@@ -1,4 +1,4 @@
-const mp = require('miniprogram-render')
+const mp = require('../../miniprogram_npm/miniprogram-render/index')
 const getBaseConfig = require('../base.js')
 const config = require('/* CONFIG_PATH */')
 
