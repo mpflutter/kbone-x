@@ -21,6 +21,15 @@ const Attribute = require('./node/attribute')
 const cache = require('./util/cache')
 const tool = require('./util/tool')
 
+// eslint-disable-next-line no-var, block-scoped-var, semi
+var $wx = wx;
+
+if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
+    // 支付宝适配逻辑
+    // eslint-disable-next-line no-undef
+    $wx = my
+}
+
 let lastRafTime = 0
 const WINDOW_PROTOTYPE_MAP = {
     location: Location.prototype,
@@ -145,7 +154,7 @@ class Window extends EventTarget {
      */
     $_fetchDeviceInfo() {
         try {
-            const info = wx.getSystemInfoSync()
+            const info = $wx.getSystemInfoSync()
 
             this.$_outerHeight = info.screenHeight
             this.$_outerWidth = info.screenWidth
@@ -639,7 +648,7 @@ class Window extends EventTarget {
     }
 
     get devicePixelRatio() {
-        return wx.getSystemInfoSync().pixelRatio
+        return $wx.getSystemInfoSync().pixelRatio
     }
 
     open(url) {
@@ -648,7 +657,7 @@ class Window extends EventTarget {
     }
 
     close() {
-        wx.navigateBack({
+        $wx.navigateBack({
             delta: 1,
         })
     }

@@ -7,6 +7,15 @@ const parser = require('../tree/parser')
 const tool = require('../util/tool')
 const Pool = require('../util/pool')
 
+// eslint-disable-next-line no-var, block-scoped-var, semi
+var $wx = wx;
+
+if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
+    // 支付宝适配逻辑
+    // eslint-disable-next-line no-undef
+    $wx = my
+}
+
 const pool = new Pool()
 
 class Element extends Node {
@@ -419,7 +428,7 @@ class Element extends Node {
 
             if (this.tagName === 'CANVAS') {
                 // TODO，为了兼容基础库的一个 bug，暂且如此实现
-                wx.createSelectorQuery().in(this.$$wxComponent).select(`.node-${this.$_nodeId}`).context(res => (res && res.context ? resolve(res.context) : reject()))
+                $wx.createSelectorQuery().in(this.$$wxComponent).select(`.node-${this.$_nodeId}`).context(res => (res && res.context ? resolve(res.context) : reject()))
                     .exec()
             } else {
                 window.$$createSelectorQuery().select(`.miniprogram-root >>> .node-${this.$_nodeId}`).context(res => (res && res.context ? resolve(res.context) : reject())).exec()
@@ -439,7 +448,7 @@ class Element extends Node {
 
             if (this.tagName === 'CANVAS') {
                 // TODO，为了兼容基础库的一个 bug，暂且如此实现
-                resolve(wx.createSelectorQuery().in(this.$$wxComponent).select(`.node-${this.$_nodeId}`))
+                resolve($wx.createSelectorQuery().in(this.$$wxComponent).select(`.node-${this.$_nodeId}`))
             } else {
                 resolve(window.$$createSelectorQuery().select(`.miniprogram-root >>> .node-${this.$_nodeId}`))
             }
@@ -744,7 +753,7 @@ class Element extends Node {
         if (+new Date() - this.$$scrollTimeStamp < 500) return // 为了兼容 mp-webpack-plugin@0.9.14 及以前的版本，在滚动事件触发后的 500ms 内，设置 scrollTop 不予处理
 
         value = parseInt(value, 10)
-        wx.pageScrollTo({scrollTop: value, duration: 0})
+        $wx.pageScrollTo({scrollTop: value, duration: 0})
         this.$$scrollTop = value
     }
 

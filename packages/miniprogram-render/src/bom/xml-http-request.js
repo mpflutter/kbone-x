@@ -2,6 +2,15 @@ const Location = require('./location')
 const EventTarget = require('../event/event-target')
 const cache = require('../util/cache')
 
+// eslint-disable-next-line no-var, block-scoped-var, semi
+var $wx = wx;
+
+if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
+    // 支付宝适配逻辑
+    // eslint-disable-next-line no-undef
+    $wx = my
+}
+
 const SUPPORT_METHOD = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT']
 const STATUS_TEXT_MAP = {
     100: 'Continue',
@@ -130,7 +139,7 @@ class XMLHttpRequest extends EventTarget {
             if (origin !== window.location.origin) delete header.cookie
         }
 
-        this.$_requestTask = wx.request({
+        this.$_requestTask = $wx.request({
             url,
             data: this.$_data || {},
             header,

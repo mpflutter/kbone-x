@@ -20,6 +20,15 @@ const WxComponent = require('./node/element/wx-component')
 const WxCustomComponent = require('./node/element/wx-custom-component')
 const Cookie = require('./bom/cookie')
 
+// eslint-disable-next-line no-var, block-scoped-var, semi
+var $wx = wx;
+
+if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
+    // 支付宝适配逻辑
+    // eslint-disable-next-line no-undef
+    $wx = my
+}
+
 const CONSTRUCTOR_MAP = {
     A,
     IMG: Image,
@@ -144,7 +153,7 @@ class Document extends EventTarget {
         if (cookieStore !== 'memory' && cookieStore !== 'globalmemory') {
             try {
                 const key = cookieStore === 'storage' ? `PAGE_COOKIE_${pageName}` : 'PAGE_COOKIE'
-                const cookie = wx.getStorageSync(key)
+                const cookie = $wx.getStorageSync(key)
                 if (cookie) this.$$cookieInstance.deserialize(cookie)
             } catch (err) {
                 // ignore

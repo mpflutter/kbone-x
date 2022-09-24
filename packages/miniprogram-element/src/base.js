@@ -23,12 +23,41 @@ let DOM_SUB_TREE_LEVEL = 10
 // setData 的模式，默认使用 data path 模式
 let isOriginalSetData = false
 
-const version = wx.getSystemInfoSync().SDKVersion
+// const version = wx.getSystemInfoSync().SDKVersion // 已经没有必要做这个判断了
 const behaviors = []
-if (_.compareVersion(version, '2.10.3') >= 0) behaviors.push('wx://form-field-button')
-if (_.compareVersion(version, '2.16.1') < 0) console.warn('当前基础库版本过低，建议调整最低支持基础库版本。')
+// if (_.compareVersion(version, '2.10.3') >= 0) behaviors.push('wx://form-field-button')
+// if (_.compareVersion(version, '2.16.1') < 0) console.warn('当前基础库版本过低，建议调整最低支持基础库版本。')
 
-module.exports = Behavior({
+// eslint-disable-next-line no-var
+var NativeBehavior = Behavior
+if (typeof NativeBehavior === 'undefined') {
+    NativeBehavior = function(options) {
+        Object.assign(options, options.methods)
+        return {
+            mixins: [
+                {
+                    onInit() {
+                        options.created()
+                    },
+                    didMount() {
+                        options.dataset = this.props
+                        options.setData = this.setData
+                        options.attached()
+                    },
+                    didUnmount() {
+                        options.detached()
+                    }
+                },
+                {data: options.data},
+                {props: {privateNodeId: '', privatePageId: ''}},
+                {methods: options.methods},
+            ],
+        }
+    }
+}
+
+// eslint-disable-next-line block-scoped-var
+module.exports = NativeBehavior({
     behaviors,
     properties: {
         inCover: {

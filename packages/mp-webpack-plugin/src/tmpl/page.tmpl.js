@@ -8,6 +8,7 @@ const baseConfig = getBaseConfig(mp, config, init)
 
 Component({
     ...baseConfig.base,
+    ...baseConfig.methods,
     methods: {
         ...baseConfig.methods,
         /* PAGE_SCROLL_FUNCTION */

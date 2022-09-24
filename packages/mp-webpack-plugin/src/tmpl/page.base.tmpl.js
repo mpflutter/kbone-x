@@ -1,5 +1,14 @@
 const mp = require('../miniprogram_npm/miniprogram-render/index')
 
+// eslint-disable-next-line no-var, block-scoped-var, semi
+var $wx = wx;
+
+if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
+    // 支付宝适配逻辑
+    // eslint-disable-next-line no-undef
+    $wx = my
+}
+
 const {
     tool,
 } = mp.$$adapter
@@ -25,8 +34,8 @@ module.exports = function(mp, config, init) {
             url = mp.$$adapter.tool.completeURL(url, window.location.origin)
 
             const options = {url: `/pages/webview/index?url=${encodeURIComponent(url)}`}
-            if (type === 'jump') wx.redirectTo(options)
-            else if (type === 'open') wx.navigateTo(options)
+            if (type === 'jump') $wx.redirectTo(options)
+            else if (type === 'open') $wx.navigateTo(options)
         } else if (value === 'error') {
             console.error(`page not found: ${evt.url}`)
         } else if (value !== 'none') {
@@ -35,9 +44,9 @@ module.exports = function(mp, config, init) {
             const packageName = subpackagesMap[value]
             const pageRoute = `/${packageName ? packageName + '/' : ''}pages/${value}/index`
             const options = {url: `${pageRoute}?type=${type}&targeturl=${encodeURIComponent(targeturl)}`}
-            if (window.$$miniprogram.isTabBarPage(pageRoute)) wx.switchTab(options)
-            else if (type === 'jump') wx.redirectTo(options)
-            else if (type === 'open') wx.navigateTo(options)
+            if (window.$$miniprogram.isTabBarPage(pageRoute)) $wx.switchTab(options)
+            else if (type === 'jump') $wx.redirectTo(options)
+            else if (type === 'open') $wx.navigateTo(options)
         }
     }
 
@@ -137,7 +146,7 @@ module.exports = function(mp, config, init) {
                 const pageConfig = this.pageConfig = config.pages[pageName] || {}
 
                 if (pageConfig.loadingText) {
-                    wx.showLoading({
+                    $wx.showLoading({
                         title: pageConfig.loadingText,
                         mask: true,
                     })
@@ -183,14 +192,14 @@ module.exports = function(mp, config, init) {
                     const menus = []
                     if (!pageConfig.share) menus.push('shareAppMessage')
                     if (!pageConfig.shareTimeline) menus.push('shareTimeline')
-                    wx.hideShareMenu({menus})
+                    $wx.hideShareMenu({menus})
                 }
 
                 // 处理 document 更新
                 this.document.documentElement.addEventListener('$$domNodeUpdate', () => {
                     if (pageConfig.rem) {
                         let rootFontSize = this.document.documentElement.style.fontSize
-                        if (!rootFontSize) rootFontSize = wx.getSystemInfoSync().screenWidth / 16 + 'px'
+                        if (!rootFontSize) rootFontSize = $wx.getSystemInfoSync().screenWidth / 16 + 'px'
                         if (rootFontSize !== this.data.rootFontSize) setData(this, {rootFontSize})
                     }
                     if (pageConfig.pageStyle) {
@@ -213,10 +222,10 @@ module.exports = function(mp, config, init) {
                 })
 
                 // 处理 selectorQuery 获取
-                this.window.$$createSelectorQuery = () => wx.createSelectorQuery().in(this)
+                this.window.$$createSelectorQuery = () => $wx.createSelectorQuery().in(this)
 
                 // 处理 intersectionObserver 获取
-                this.window.$$createIntersectionObserver = options => wx.createIntersectionObserver(this, options)
+                this.window.$$createIntersectionObserver = options => $wx.createIntersectionObserver(this, options)
 
                 // 处理 openerEventChannel 获取
                 this.window.$$getOpenerEventChannel = () => this.getOpenerEventChannel()
@@ -247,7 +256,7 @@ module.exports = function(mp, config, init) {
                 }
             },
             onReady() {
-                if (this.pageConfig.loadingText) wx.hideLoading()
+                if (this.pageConfig.loadingText) $wx.hideLoading()
                 if (this.pageConfig.loadingView) setTimeout(() => setData(this, {loading: false}), 1000) // 1s 后再删除，确保页面初始渲染逻辑完成
                 this.window.$$trigger('wxready')
             },

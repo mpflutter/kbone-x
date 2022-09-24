@@ -1,6 +1,15 @@
 const Location = require('./location')
 const cache = require('../util/cache')
 
+// eslint-disable-next-line no-var, block-scoped-var, semi
+var $wx = wx;
+
+if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
+    // 支付宝适配逻辑
+    // eslint-disable-next-line no-undef
+    $wx = my
+}
+
 class Cookie {
     constructor(pageName) {
         const config = cache.getConfig()
@@ -166,7 +175,7 @@ class Cookie {
         // 持久化 cookie
         if (this.cookieStore !== 'memory' && this.cookieStore !== 'globalmemory') {
             const key = this.cookieStore === 'storage' ? `PAGE_COOKIE_${this.$_pageName}` : 'PAGE_COOKIE'
-            wx.setStorage({
+            $wx.setStorage({
                 key,
                 data: this.serialize(),
             })

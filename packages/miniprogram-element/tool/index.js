@@ -183,6 +183,25 @@ function replaceRequire() {
     fs.writeFileSync('dist/base.js', c)
 }
 
+function copyAxml() {
+    {
+        const template = fs.readFileSync(path.join(__dirname, '..', 'src', './index.axml'), 'utf8')
+        fs.writeFileSync(path.resolve(__dirname, '..', 'dist', './index.axml'), template, 'utf8')
+    }
+    {
+        const template = fs.readFileSync(path.join(__dirname, '..', 'src', './index.acss'), 'utf8')
+        fs.writeFileSync(path.resolve(__dirname, '..', 'dist', './index.acss'), template, 'utf8')
+    }
+    {
+        const template = fs.readFileSync(path.join(__dirname, '..', 'src', './index-vhost.axml'), 'utf8')
+        fs.writeFileSync(path.resolve(__dirname, '..', 'dist', './index-vhost.axml'), template, 'utf8')
+    }
+    {
+        const template = fs.readFileSync(path.join(__dirname, '..', 'src', './index-vhost.acss'), 'utf8')
+        fs.writeFileSync(path.resolve(__dirname, '..', 'dist', './index-vhost.acss'), template, 'utf8')
+    }
+}
+
 function main() {
     createSubtreeTemplate()
     createSubtreeCoverTemplate()
@@ -190,6 +209,7 @@ function main() {
     createIndexTemplate()
 
     build(function() {
+        copyAxml()
         replaceRequire()
     })
 }
