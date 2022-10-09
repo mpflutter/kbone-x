@@ -6,6 +6,13 @@ const config = require('/* CONFIG_PATH */')
 
 const baseConfig = getBaseConfig(mp, config, init)
 
+if (typeof my !== 'undefined') {
+  Page({
+    ...baseConfig.base,
+    ...baseConfig.methods,
+  })
+}
+
 Component({
     ...baseConfig.base,
     ...baseConfig.methods,

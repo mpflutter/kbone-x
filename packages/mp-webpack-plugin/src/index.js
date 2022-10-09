@@ -272,12 +272,15 @@ class MpPlugin {
                 if (loadingView) pageWxmlContent = `<loading-view wx:if="{{loading}}" class="miniprogram-loading-view" page-name="${entryName}"></loading-view>` + pageWxmlContent
                 if (rem || pageStyle) pageWxmlContent = `<page-meta ${rem ? 'root-font-size="{{rootFontSize}}"' : ''} ${pageStyle ? 'page-style="{{pageStyle}}"' : ''}></page-meta>` + pageWxmlContent
                 addFile(compilation, `../${pageRoute}.wxml`, pageWxmlContent)
+                addFile(compilation, `../${pageRoute}.axml`, pageWxmlContent.replace(/wx:/g, 'a:')) // ali
 
                 // 页面 wxss
                 let pageWxssContent = assets.css.map(css => `@import "${getAssetPath(assetPathPrefix, css, assetsSubpackageMap)}";`).join('\n')
                 if (loadingView) pageWxssContent = '.miniprogram-loading-view{position:fixed;top:0;left:0;bottom:0;right:0;z-index:0;}.miniprogram-root{display:block;position:relative;z-index:1;background:#fff;}' + pageWxssContent
                 if (pageBackgroundColor) pageWxssContent = `page{background-color:${pageBackgroundColor};}\n` + pageWxssContent
                 addFile(compilation, `../${pageRoute}.wxss`, adjustCss(pageWxssContent))
+                addFile(compilation, `../${pageRoute}.acss`, adjustCss(pageWxssContent)) // ali
+                
 
                 // 页面 json
                 const pageJson = {

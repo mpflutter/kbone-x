@@ -21,6 +21,8 @@
         "stylehacks": "^4.0.3",
         "webpack": "^4.29.6",
         "webpack-cli": "^3.2.3",
-        "mp-webpack-plugin": "/Users/saiakirahui/Documents/kbone-x/packages/mp-webpack-plugin"
+        "mp-webpack-plugin": "/Users/saiakirahui/Documents/kbone-x/packages/mp-webpack-plugin",
+        "miniprogram-element": "/Users/saiakirahui/Documents/kbone-x/packages/miniprogram-element",
+        "miniprogram-render": "/Users/saiakirahui/Documents/kbone-x/packages/miniprogram-render"
     }
 }

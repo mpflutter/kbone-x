@@ -22,12 +22,14 @@ const cache = require('./util/cache')
 const tool = require('./util/tool')
 
 // eslint-disable-next-line no-var, block-scoped-var, semi
-var $wx = wx;
+var $wx;
 
 if (typeof $wx === 'undefined' && typeof my !== 'undefined') {
     // 支付宝适配逻辑
     // eslint-disable-next-line no-undef
     $wx = my
+} else {
+    $wx = wx
 }
 
 let lastRafTime = 0

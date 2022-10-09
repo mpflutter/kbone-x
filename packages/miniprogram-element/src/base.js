@@ -29,7 +29,7 @@ const behaviors = []
 // if (_.compareVersion(version, '2.16.1') < 0) console.warn('当前基础库版本过低，建议调整最低支持基础库版本。')
 
 // eslint-disable-next-line no-var
-var NativeBehavior = Behavior
+var NativeBehavior
 if (typeof NativeBehavior === 'undefined') {
     NativeBehavior = function(options) {
         Object.assign(options, options.methods)
@@ -54,6 +54,8 @@ if (typeof NativeBehavior === 'undefined') {
             ],
         }
     }
+} else {
+    NativeBehavior = Behavior
 }
 
 // eslint-disable-next-line block-scoped-var
