@@ -30,7 +30,7 @@ const behaviors = []
 
 // eslint-disable-next-line no-var
 var NativeBehavior
-if (typeof NativeBehavior === 'undefined') {
+if (typeof Behavior === 'undefined') {
     NativeBehavior = function(options) {
         Object.assign(options, options.methods)
         return {
