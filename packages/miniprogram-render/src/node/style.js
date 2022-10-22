@@ -69,15 +69,15 @@ class Style {
                     return this[`$_${name}`] || ''
                 },
                 set(value) {
-                    const config = cache.getConfig()
+                    // const config = cache.getConfig()
                     const oldValue = this[`$_${name}`]
                     value = value !== undefined ? '' + value : undefined
 
                     // 判断 value 是否需要删减
-                    if (value && config.optimization.styleValueReduce && value.length > config.optimization.styleValueReduce) {
-                        console.warn(`property "${name}" will be deleted, because it's greater than ${config.optimization.styleValueReduce}`)
-                        value = undefined
-                    }
+                    // if (value && config.optimization.styleValueReduce && value.length > config.optimization.styleValueReduce) {
+                    //     console.warn(`property "${name}" will be deleted, because it's greater than ${config.optimization.styleValueReduce}`)
+                    //     value = undefined
+                    // }
 
                     this[`$_${name}`] = value
                     if (oldValue !== value) this.$_checkUpdate()
